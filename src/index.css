@@ -302,7 +302,13 @@ body {
   cursor: pointer;
   transition: all 0.3s;
 }
-
+.spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
 .btn-add:hover {
   background-color: var(--color-primary-light);
 }

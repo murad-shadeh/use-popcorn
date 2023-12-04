@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import { TailSpin } from "react-loader-spinner";
 const tempMovieData = [
   {
     imdbID: "tt1375666",
@@ -52,10 +52,19 @@ const average = (arr) =>
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
+  const [isLoading, setIsLoading] = useState(false);
+  const query = "interstellar";
   useEffect(() => {
-    fetch(`http://www.omdbapi.com/?apikey=${Key}&s=interstellar`)
-      .then((res) => res.json())
-      .then((data) => setMovies(data.Search));
+    async function fetchMovies() {
+      setIsLoading(true);
+      const res = await fetch(
+        `http://www.omdbapi.com/?apikey=${Key}&s=${query}`
+      );
+      const data = await res.json();
+      setMovies(data.Search);
+      setIsLoading(false);
+    }
+    fetchMovies();
   }, []);
 
   return (
@@ -67,7 +76,22 @@ export default function App() {
       </Navbar>
       <Main>
         <Box>
-          <MovieList movies={movies} />
+          {isLoading ? (
+            <div className="spinner">
+              <TailSpin
+                height="40"
+                width="40"
+                color="#fff"
+                ariaLabel="tail-spin-loading"
+                radius="1"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+              />
+            </div>
+          ) : (
+            <MovieList movies={movies} />
+          )}
         </Box>
         <Box>
           <WatchedSummary watched={watched} />
@@ -77,6 +101,9 @@ export default function App() {
     </>
   );
 }
+// const Loader = () => {
+//   return <p className="loader">Loading...</p>;
+// };
 const Navbar = ({ children }) => {
   return (
     <nav className="nav-bar">
