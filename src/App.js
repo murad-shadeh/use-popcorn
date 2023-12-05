@@ -53,16 +53,28 @@ export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const query = "interstellar";
   useEffect(() => {
     async function fetchMovies() {
-      setIsLoading(true);
-      const res = await fetch(
-        `http://www.omdbapi.com/?apikey=${Key}&s=${query}`
-      );
-      const data = await res.json();
-      setMovies(data.Search);
-      setIsLoading(false);
+      try {
+        setIsLoading(true);
+        const res = await fetch(
+          `http://www.omdbapi.com/?apikey=${Key}&s=${query}`
+        );
+        if (!res.ok) {
+          throw new Error("Failed to fetch data");
+        }
+
+        const data = await res.json();
+        if (data.Response === "False") throw new Error("Movie not found");
+        setMovies(data.Search);
+      } catch (err) {
+        console.log(err.message);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
     }
     fetchMovies();
   }, []);
@@ -76,7 +88,7 @@ export default function App() {
       </Navbar>
       <Main>
         <Box>
-          {isLoading ? (
+          {/* {isLoading ? (
             <div className="spinner">
               <TailSpin
                 height="40"
@@ -91,7 +103,23 @@ export default function App() {
             </div>
           ) : (
             <MovieList movies={movies} />
+          )} */}
+          {isLoading && (
+            <div className="spinner">
+              <TailSpin
+                height="40"
+                width="40"
+                color="#fff"
+                ariaLabel="tail-spin-loading"
+                radius="1"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+              />
+            </div>
           )}
+          {!isLoading && !error && <MovieList movies={movies} />}
+          {error && <ErrorMessage message={error} />}
         </Box>
         <Box>
           <WatchedSummary watched={watched} />
@@ -104,6 +132,13 @@ export default function App() {
 // const Loader = () => {
 //   return <p className="loader">Loading...</p>;
 // };
+const ErrorMessage = ({ message }) => {
+  return (
+    <p className="error">
+      <span>⛔</span> {message}
+    </p>
+  );
+};
 const Navbar = ({ children }) => {
   return (
     <nav className="nav-bar">
