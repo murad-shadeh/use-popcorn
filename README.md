@@ -1,6 +1,6 @@
 # Use Popcorn App
 
-#### [View on Netlify](https://pizzawithreact.netlify.app/)
+#### [View on Netlify](https://popcornformovies.netlify.app)
 
 ---
 
