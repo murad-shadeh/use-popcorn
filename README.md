@@ -4,6 +4,27 @@
 
 ---
 
+## The wireframe
+
+![alt text](public/wireframe.jpg)
+
+---
+
+### Technologies and tools used:
+
+- HTML
+- CSS
+- JAVASCRIPT
+- REACTJS
+- Fetch API
+- GIT
+- GITHUB
+- VSCODE
+- Netlify
+- MIRO
+
+---
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
