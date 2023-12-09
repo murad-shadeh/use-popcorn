@@ -1,5 +1,5 @@
 import { useState } from "react";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 const containerStyle = {
   display: "flex", //place two elements side by side
   alignItems: "center", // align the items vertically
