@@ -3,6 +3,7 @@ import { TailSpin } from "react-loader-spinner";
 import StarRating from "./StarRating";
 import { useState } from "react";
 import { Key } from "../App";
+import { useKey } from "../utils/useKey";
 const MovieDetails = ({
   selectedId,
   handleCloseMovie,
@@ -12,6 +13,7 @@ const MovieDetails = ({
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [userRating, setUserRating] = useState("");
+  useKey("Escape", handleCloseMovie);
   // check if the movie already in the watched list
   const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
   const watchedUserRating = watched.find(
@@ -43,18 +45,7 @@ const MovieDetails = ({
     handleAddWatched(newWatchedMovie);
     handleCloseMovie();
   };
-  useEffect(() => {
-    function callback(e) {
-      if (e.code === "Escape") {
-        handleCloseMovie();
-      }
-    }
-    document.addEventListener("keydown", callback);
-    return () => {
-      // making the event listener execyted only once at a time
-      document.removeEventListener("keydown", callback);
-    };
-  }, [handleCloseMovie]);
+
   useEffect(() => {
     async function getMovieDetails() {
       setIsLoading(true);
