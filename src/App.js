@@ -61,7 +61,13 @@ export const Key = "80624623";
 export default function App() {
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState(tempMovieData);
-  const [watched, setWatched] = useState(tempWatchedData);
+  // const [watched, setWatched] = useState(tempWatchedData);
+  const [watched, setWatched] = useState(() => {
+    // the data is string we should convert it to javascript object
+    const storedValue = localStorage.getItem("watched");
+    return JSON.parse(storedValue);
+  });
+
   const [isLoading, setIsLoading] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [error, setError] = useState("");
@@ -77,6 +83,11 @@ export default function App() {
   const handleDeleteWatched = (id) => {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   };
+  useEffect(() => {
+    // using local storage to not lose the data when reloading
+    // store movie in local storage
+    localStorage.setItem("watched", JSON.stringify(watched));
+  }, [watched]);
   useEffect(() => {
     const controller = new AbortController();
     async function fetchMovies() {
